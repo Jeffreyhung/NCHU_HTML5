@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="utf-8">
+	    <title>紀錄表</title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+		<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
+        <script type="text/javascript" language="javascript"></script>
+	</head>
+<body>
+    <div data-role="page" id="x">
+	    <div data-role="header">
+			<h1>我的運動及飲食紀錄表</h1>
+			<a href="home.html" rel="external">回首頁</a>
+			</div>
+	<div data-role="content" style="margin:0px 0px 0px 0px; padding:10px 2% 400px 2%; width:96%; height:900px; background-color:#FFFFFF;">
+		<div data-role="collapsible" data-theme="b" data-content-theme="c">
+			<h3>紀錄資料</h3>
+		<center>
+		<label for="basic">姓名:</label>
+				<input type="text" name="name" id="name" value=""  />
+		<div data-role="fieldcontain">
+				<label for="date">紀錄日期:</label>
+				<input type="date" name="date" id="date" value="" />
+			</div>
+			<label for="select-choice-0" class="select">種類:</label>
+				<select name="type" id="type">
+					<option value="exercising">運動</option>
+					<option value="eating">飲食</option>
+				</select>
+			<label for="basic">運動類型:</label>
+				<input type="text" name="exercisetype" id="exercisetype" value=""  />
+			<label for="basic">運動時間長::</label>
+				<input type="text" name="time" id="time" value=""  />
+			<label for="basic">運動地點:</label>
+				<input type="text" name="loca" id="loca" value=""  />
+				
+			<label for="basic">體重:</label>
+				<input type="text" name="weight" id="weight" value=""  />
+			<label for="select-choice-0" class="select">餐飲:</label>
+				<select name="meal" id="meal">
+					<option value="breakfast">早餐</option>
+					<option value="lunch">午餐</option>
+					<option value="dinner">晚餐</option>
+					<option value="snack">點心</option>
+				</select>
+			<label for="basic">飲水量:</label>
+				<input type="text" name="water" id="eater" value=""  />
+			<button type="button" onclick="alert('資料已傳送!')" herf="https://docs.google.com/forms/d/1yk5v_xgkHEGbqdXDvdwdPjmEW0RB2shQLUwXIKmNIC8/formResponse?entry.1473489991=" + name +"&entry.1507402034=" + date +"&entry.1486210838=" +type+ "&entry.217903073=" +exercisetype +"&entry.455535547=" + time+ "&entry.201476026=" + loca + "&entry.1232654046" + weight +"&entry.1174905967=" + meal + "&entry.1327681492=" + water+"&submit=Submit">送出資料</button>
+		</center>
+		</div>
+		<div data-role="collapsible" data-theme="b" data-content-theme="b">
+			<h3>紀錄結果</h3>
+			<center>
+			<img src="pic/cal.png"/>
+			</center>
+		</div>
+	</div>
+</body>
+</html>

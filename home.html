@@ -1,0 +1,41 @@
+<!DOCTYPE html> 
+<html> 
+	<head> 
+		<meta charset="utf-8">
+		<title>Home</title> 		
+		<meta name="viewport" content="width=device-width, initial-scale=1"> 
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+		<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
+            <script type="text/javascript" language="javascript"></script>
+			
+		<script>
+            link = ["1-exercise _intro.html", "2-video.html", "3-eating.html", "4-calender.html", "5-map.html", "6-timer2.html", "7-emergency.html", "8-friend_web.html", "9-feedback.html"];
+			imageicon = ["document.png", "clapboard.png", "heart.png", "calendar.png", "location.png", "clock.png", "caution.png", "magnifyingglass.png", "gear.png"];
+			ninegrid = ["a", "b", "c"];
+            gridname = ["運動介紹", "教學影片", "飲食控制教學", "我的運動<br/>及飲食紀錄表", "附近的運動場<br/>及體育用品店", "鬧鐘提醒", "急救處理", "好站連結", "關於我們<br/>及意見回饋"];
+				function f()
+				{
+					for (var i=0; i<9; i++)
+					{
+					total = '<div class="ui-block-' + ninegrid[i%3] + '" style="height:200px" align="center"><a href="' + link[i] + '" rel="external"><img src="pic/' +imageicon[i] + '"/><br>' + gridname[i] + '</a></div>';
+					document.write(total);
+					}
+				}
+		</script>
+			
+	</head> 
+	
+	<body> 
+
+		<div data-role="page">
+			<div data-role="header">
+				<h1>我們來運動吧！</h1>
+			</div>
+			<div data-role="content">	
+				<div class="ui-grid-b"><script>f();</script></div>	
+			</div>
+		</div>
+
+	</body>
+</html>

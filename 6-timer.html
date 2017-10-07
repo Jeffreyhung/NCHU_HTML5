@@ -1,0 +1,504 @@
+<!DOCTYPE html> 
+<html lang="zh-TW">
+    <head>
+    	 <title>鬧鐘提醒</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="x-ua-compatible" content="IE=edge" />
+		<meta name="viewport" content="initial-scale=0.5, maximum-scale=2.0, minimum-scale=0.2, user-scalable=yes">
+        <Meta http-equiv="Expires" Content="0">
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="http://min.0123456789.tw/" />
+		<meta property="fb:app_id" content="197011163651329" />
+		<meta name="viewport" content="width=device-width, initial-scale=1"> 
+		<link rel="stylesheet" type="text/css" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+		<link rel="stylesheet" type="text/css" href="css.html" />
+		<script type="text/javascript" language="javascript"></script>
+
+      <SCRIPT LANGUAGE="JavaScript">
+
+var StopWatch_stopWatches = new Array();
+var StopWatch_count       = 0;
+function StopWatch(form,timeField,buttonA,buttonB,unit)	  // unit "s"|"ms"
+{
+  this.start     = StopWatch_start;    // start()
+  this.stop      = StopWatch_stop;     // stop()
+  this.snapshot  = StopWatch_snapshot; // snapshot()
+  this.reset     = StopWatch_reset;    // reset()
+  this.resume    = StopWatch_resume;   // resume() : should be continue() but continue is a reserved word
+  // declare private functions
+  this.setState  = StopWatch_setState; // (bRefresh,buttonA_value,buttonB_value)
+  this.run       = StopWatch_run;      // run(type) : type is any button value, i.e. type = Start|Stop|Snapshot|Reset|Continue
+  this.now       = StopWatch_now;      // now()
+  this.refresh   = StopWatch_refresh;  // refresh()
+  // note static functions - (index) is index of this stopwatch (in StopWatch_stopWatches)
+  //  StopWatch_Static_update(index)	// is static because it is called by setTimeout()
+  //  StopWatch_Static_runA(index)		// is static because it is called by onclick handler (buttonA)
+  //  StopWatch_Static_runB(index)		// is static because it is called by onclick handler (buttonB)
+  // declare (private) variables
+  this.timeField = form.elements[timeField];
+  this.buttonA   = form.elements[buttonA];
+  this.buttonB   = form.elements[buttonB];
+  this.index     = StopWatch_count++;
+  this.unit      = unit;
+  this.tStarted  = 0;  					// start time of counting
+  this.bRefresh  = false;       		// whether or not to update time field
+  // other constructions
+  this.timeField.value = "0";			// init form elements
+  this.buttonA.value   = "Start";
+  this.buttonB.value   = "Reset";
+  this.buttonA.onclick = new Function("","StopWatch_Static_runA("+this.index+")");
+  this.buttonB.onclick = new Function("","StopWatch_Static_runB("+this.index+")");
+  StopWatch_stopWatches[this.index] = this;  // add this to static var
+  StopWatch_Static_update(this.index);	     // 'spawn' timer (runs throughout)
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// public functions
+function StopWatch_start()
+{
+  var startTime   = new Date();    
+  switch (this.unit) {		// start from time in edit field
+    case "ms":    startTime.setTime(this.now() - this.timeField.value);        break;		// milliseconds
+    case "s":     startTime.setTime(this.now() - this.timeField.value*1000);   break;		// seconds
+  } // switch
+  this.tStarted        = startTime.getTime();
+  this.resume();
+}
+function StopWatch_stop()		{ this.setState(false, "Start", "Reset");    }
+function StopWatch_snapshot()   { this.setState(false, "Stop",  "Continue"); }
+function StopWatch_reset()      { this.setState(false, "Start", "Reset");  this.timeField.value = "0"; }
+function StopWatch_resume()     { this.setState(true,  "Stop",  "Snapshot"); }
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// static functions
+function StopWatch_Static_update(index)
+{
+  var stopWatch = StopWatch_stopWatches[index];
+  setTimeout("StopWatch_Static_update("+index+")", 50);
+  if (stopWatch.bRefresh)
+    stopWatch.refresh();
+}
+function StopWatch_Static_runA(index)
+{
+  var stopWatch = StopWatch_stopWatches[index];
+  stopWatch.run(stopWatch.buttonA.value);
+}
+function StopWatch_Static_runB(index)
+{
+  var stopWatch = StopWatch_stopWatches[index];
+  stopWatch.run(stopWatch.buttonB.value);
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// private functions
+function StopWatch_setState(bRefresh,buttonA_value,buttonB_value)
+{
+  this.bRefresh        = bRefresh;
+  this.buttonA.value   = buttonA_value;
+  this.buttonB.value   = buttonB_value;
+}
+function StopWatch_run(type)    
+{ 
+  if (type=="Continue")
+    this.resume();
+  else
+    eval("this."+type.toLowerCase()+"()"); 
+}
+function StopWatch_now()    
+{
+  var timeNow = new Date();
+  return timeNow.getTime();
+}
+function StopWatch_refresh()
+{
+  var tElapsed = this.now() - this.tStarted;
+  switch (this.unit) {
+    case "ms":    this.timeField.value = tElapsed;                   break;		// milliseconds
+    case "s":     this.timeField.value = Math.floor(tElapsed/1000);  break;		// seconds
+  } // switch
+}
+//  End -->
+</script>
+<script language="JavaScript">
+<!-- 
+var up,down;
+var min1,sec1;
+var cmin1,csec1,cmin2,csec2;
+function Minutes(data) {
+	for(var i=0;i<data.length;i++) if(data.substring(i,i+1)==":") break;
+	return(data.substring(0,i)); }
+function Seconds(data) {
+	for(var i=0;i<data.length;i++) if(data.substring(i,i+1)==":") break;
+	return(data.substring(i+1,data.length)); }
+function Display(min,sec) {
+	var disp;
+	if(min<=9) disp=" 0";
+	else disp=" ";
+	disp+=min+":";
+	if(sec<=9) disp+="0"+sec;
+	else disp+=sec;
+	return(disp); }
+function Up() {
+	cmin1=0;
+	csec1=0;
+	min1=0+Minutes(document.sw.beg1.value);
+	sec1=0+Seconds(document.sw.beg1.value);
+	UpRepeat(); }
+function UpRepeat() {
+	csec1++;
+	if(csec1==60) { csec1=0; cmin1++; }
+	document.sw.disp1.value=Display(cmin1,csec1);
+	if((cmin1==min1)&&(csec1==sec1)) alert("計秒停止");
+	else up=setTimeout("UpRepeat()",1000); }
+function PauseUp() {
+alert("計秒暫停"); }
+function Down() {
+	cmin2=1*Minutes(document.sw.beg2.value);
+	csec2=0+Seconds(document.sw.beg2.value);
+	DownRepeat(); }
+function DownRepeat() {
+	csec2--;
+	if(csec2==-1) { csec2=59; cmin2--; }
+	document.sw.disp2.value=Display(cmin2,csec2);
+	if((cmin2==0)&&(csec2==0)) alert("倒數秒停止");
+	else down=setTimeout("DownRepeat()",1000); }
+function PauseDown() {
+alert("倒數秒暫停"); }
+
+// -->
+</script>
+<style type="text/css"> 
+#container {
+	margin: auto;
+	position: relative;
+	padding: 0;
+	text-align: center;
+	width: 728px;
+	font-family: "微軟正黑體", "新細明體";
+	font-size: 14pt;
+	background-color: #dfe3ee;
+	}
+
+.formc1min {
+	font-size: 30px;
+	color: #3a342d;
+	border-top-width: 3px;
+	border-right-width: 3px;
+	border-bottom-width: 3px;
+	border-left-width: 3px;
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: solid;
+	border-left-style: none;
+	border-top-color: #3a342d;
+	border-right-color: #3a342d;
+	border-bottom-color: #3a342d;
+	border-left-color: #3a342d;
+	font-weight: normal;
+	height: 30px;
+	width: 200px;
+}
+
+.formc2min {
+	font-size: 16px;
+	color: #FFFFFF;
+	font-weight: bold;
+	background-color: #467cab;
+	text-align: center;
+	vertical-align: middle;
+	border: 2px ridge #1963a5;
+	height: 25px;
+	width: 80px;
+}
+	</style>
+      <script type="text/javascript" async >
+//<![CDATA[
+  (function() {
+    var shr = document.createElement('script');
+    shr.setAttribute('data-cfasync', 'false');
+    shr.src = '//dsms0mj1bbhn4.cloudfront.net/assets/pub/shareaholic.js';
+    shr.type = 'text/javascript'; shr.async = 'true';
+    shr.onload = shr.onreadystatechange = function() {
+      var rs = this.readyState;
+      if (rs && rs != 'complete' && rs != 'loaded') return;
+      var apikey = 'b9a409a9a424b563f85e11c13c3565be';
+      try { Shareaholic.init(apikey); } catch (e) {}
+    };
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(shr, s);
+  })();
+//]]>
+</script>
+    </head>
+  <BODY BGCOLOR=#ffffff vlink=#0000ff   onload=
+  "
+    stopWatch1 = new StopWatch(document.frm,'time1','buttonA1','buttonB1','ms'); 
+    stopWatch2 = new StopWatch(document.frm,'time2','buttonA2','buttonB2','s');
+  ">
+<script language="JavaScript" type="text/javascript"><!--
+function openDescription(ID) {
+var url = "http://www.ppcforhosts.com/public/util/description.cfm?id=" + ID;
+link = window.open(url,"newWin","directories=0,height=250,location=0,menubar=0,resizable=1,scrollbars=1,status=0,toolbar=0,width=450");
+}
+//--></script>
+   <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/zh_TW/all.js#xfbml=1&appId=197011163651329";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+</script>
+        <div id="content" class="snap-content">
+            <div id="toolbar">
+                <a href="home.html" rel="external" id="open-left"></a>
+                <h1>鬧鐘提醒</h1>    </div><br><br><br>
+                <table BORDER="0" WIDTH="100%" HEIGHT="30">
+    <tr>
+        <th><div align="left"> <div class="fb-like" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div>
+ <span>
+<script type="text/javascript">(function(global){
+    //namespace
+    var ns = (function(){
+        var namespaces = 'media.line.naver.jp'.split('.');
+        var obj = global;
+        while (namespaces.length > 0) {
+            var segment = namespaces.pop();
+            if(typeof obj[segment] === 'undefined'){
+                obj[segment] = {};
+            }
+            if(typeof obj[segment] !== 'object') {
+                // do nothing
+                return null;
+            }
+            obj = obj[segment];
+        }
+        return obj;
+    })();
+    if (! ns) {
+        return;
+    }
+    // util
+    var $ = {
+        bind: function(obj, type, fn){
+            obj.addEventListener ?
+                obj.addEventListener(type, fn, false) :
+                obj.attachEvent('on'+type, fn);
+        },
+        getThisScriptElement: function() {
+            // returns caller script element node if it is called in loading
+            var scripts = document.getElementsByTagName('script');
+            return scripts[scripts.length -1];
+        },
+        each: function(array, fn) {
+            for ( var i = 0, l = array.length; i < l; i++ ) {
+                var r = fn(i, array[i], array);
+                if (r === false) {return;}
+            }
+        },
+        attr: function(el, obj){
+            for (var key in obj) {
+                el.setAttribute(key, obj[key]);
+            }
+        },
+        map: function(array, fn){
+            var res = [];
+            $.each(array, function(i, v, a){
+                res.push(fn(i, v, a));
+            });
+            return res;
+        },
+        filter: function(array, fn){
+            var res = [];
+            $.each(array, function(i, v, a){
+                if(fn(i, v, a)){res.push(v)};
+            });
+            return res;
+        },
+        ready: function(fn){
+            $.bind(window, 'load', fn);
+        },
+        isSmartphone: function(){
+            return navigator.userAgent.match(/(iPhone|iPod|iPad|Android)/i);
+        }
+    };
+    var lineButton = {
+        constant: {
+            LINE_BASE_URL: '//line.naver.jp/R/msg/text/',
+            IMG_BASE_URL: '//media.line.naver.jp/img/button/',
+            ALT: {ja: 'LINE\u3067\u9001\u308b', en: 'LINE it!'},
+            // width, height
+            IMG_SIZE: {ja: {a:[88,20], b:[20,20], c:[30,30], d:[40,40], e:[36,60]},
+                       en: {a:[73,20], b:[20,20], c:[30,30], d:[40,40], e:[36,60]}}
+        },
+        insertButton: function(argOption, scriptParent, script){
+            var self = this;
+            var option = self.validate(argOption);
+            if (!(option.pc || $.isSmartphone())){
+                return;
+            }
+            var s = (script.parentNode === scriptParent) ? script : undefined;
+            scriptParent.insertBefore(self.createTag(option), s);
+        },
+        validate: function(argOption){
+            var self = this;
+            var pattern = {lang: /^(ja|en)$/,
+                           type: /^(a|b|c|d|e)$/,
+                           text: /^[\s\S]+$/};
+            //default
+            var option = {lang: 'ja', type: 'a', text: null};
+            if (!argOption) {
+                return option;
+            }
+            for (var key in option) {
+                if (argOption[key]
+                    && typeof argOption[key] === 'string'
+                    && argOption[key].match(pattern[key])){
+                    option[key] = argOption[key];
+                }
+            }
+            option.withUrl = !!argOption.withUrl;
+            option.pc = !!argOption.pc;
+            return option;
+        },
+         createTag: function(option){
+            var self = this;
+            var size = self.constant.IMG_SIZE[option.lang][option.type];
+            var a = document.createElement('a');
+            $.attr(a, {href: self.createUrl(option)});
+            var img = document.createElement('img');
+            $.attr(img,
+                   {src: self.createImageUrl(option),
+                    width: size[0],
+                    height: size[1],
+                    alt: self.constant.ALT[option.lang]});
+            
+            a.appendChild(img);
+            return a;
+        },
+        createUrl: function(option){
+            var self = this;
+            var text = self.text(option);
+            return [self.constant.LINE_BASE_URL,
+                    encodeURIComponent(text).replace(/\+/g, '%20')
+                   ].join('?');
+        },
+        text: function(option){
+            var text;
+            if (option.text) {
+                text = [option.text];
+                if(option.withUrl){
+                    text.push(document.location.href);
+                }
+            } else {
+                text = [document.title, document.location.href];
+            }
+            return text.join('\n');
+        },
+        createImageUrl: function(option){
+            var self = this;
+            var C = self.constant;
+            var size = C.IMG_SIZE[option.lang][option.type];
+            return [C.IMG_BASE_URL,
+                    option.lang, '/',
+                    size[0], 'x', size[1], '.png'].join('');
+        }
+    };
+    global.jp.naver.line.media.LineButton = function(option){
+        // for jQuery Mobile
+        // It cannot move with document.write()
+        // and it removes script tag...
+        var script = $.getThisScriptElement();
+        var scriptParent = script.parentNode;
+        
+        if(scriptParent.tagName.toLowerCase() !== 'head'){
+            $.ready(function(){
+                lineButton.insertButton(option, scriptParent, script);
+            });
+        }
+    };
+})(this);</script>
+<script type="text/javascript">
+new jp.naver.line.media.LineButton({"pc":false,"lang":"en","type":"a"});
+</script>
+</span>           
+     <div align="center" id="container">
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- min15 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:15px"
+     data-ad-client="ca-pub-6363297981371690"
+     data-ad-slot="9494776922"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+	<form name="frm">
+	<span>======讀秒計時======</span>
+	  <table width="70%" border="0" align="center" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="50%"></td>
+                  <td width="50%">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td colspan="2"><div align="center"><b>計時器:</b>
+                          <input name="time2" type="text" class="formc1min" style="text-align:right" size="5" />
+                    秒 </div></td>
+                </tr>
+                <tr>
+                  <td><div align="right">
+                      <input name="buttonA2" type="button" class="formc2min" value="開始計時" />
+                  </div></td>
+                  <td><input name="buttonB2" type="button" class="formc2min" value="暫停" /></td>
+                </tr>
+              </table>
+	</form>
+	<hr>
+	<form name="sw">
+	<table width="90%" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td><span>====倒數計時器===</span> </div>
+                        <br /></td>
+                  </tr>
+                </table>
+                <br />
+                <table width="95%" border="0" cellpadding="0" cellspacing="0" class="style13">
+                  <tr>
+                    <td colspan="3"><div align="left"></div></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <input name="beg2" type="text" class="formc1min" value="0:10" size="7" /></td>
+                    <td class="style13"><div align="left"> 剩下
+                      <input name="disp2" type="text" class="formc2min" size="9" />
+                    </div></td>
+					
+                    <td class="style13"><div align="center"><br>
+                        <input name="button3" type="button" class="formc2min" onclick="Down()" value="Start" />
+                        <input name="button4" type="button" class="formc2min" onclick="PauseDown()" value="Pause" />
+                        <input name="reset2" type="reset" class="formc2min" value="Reset" />
+                    </div></td>
+                  </tr>
+                
+                  <tr>
+				  <center>
+                    <td colspan="3"><div align="left" class="style17 style19">請輸入分鐘和秒數(ex:八小時5秒>>480:05)<br />
+                      </div></td>
+					  </center>
+                  </tr>
+                </table>
+	</form>
+	<br><br>
+	
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- min90 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-6363297981371690"
+     data-ad-slot="6541310525"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+	<br><br>
+	  </div>
+    
+  </div></div>
+ </body>
+</html>

@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html> 
+<html> 
+<head>
+    
+    <title>關於我們與意見回饋</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+		<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
+            <script type="text/javascript" language="javascript"></script>
+		<script type="text/javascript">
+function formresponse() {
+	var m = document.forms["form1"]["thought"].value;
+
+		var MySubmit = "https://docs.google.com/forms/d/1Xqlq3xtx2KhKeU1qsAl6dhJjU41MqE_8soSZBDuX5c0/formResponse?entry.1389851359=" + m + "&submit=Submit";
+		$("#formresponse").html(unescape("%3Cscript type='text/javascript' src='" + MySubmit + "'%3E%3C/script%3E"));
+		alert("謝謝您的寶貴意見");
+}
+</script>
+</head>
+<body>
+<center>
+			<div data-role="header">
+			<h1>關於我們與意見回饋</h1>
+			<a href="home.html" rel="external">回首頁</a>
+			</div>
+	<h1><strong>我們來運動吧!</strong></h1>
+	<img src="pic/DnJ.png" height="128"/><h3><b>D & J 榮譽出品</b></h3>
+	<h3>製作團隊:</h3>
+	<h3>胡孝宇 & 洪啟恆</h3>
+	<h4>技術指導: 陳育毅教授、中興大學資訊管理學系</h4>
+	
+	<hr>
+	<span id="formresponse"></span>
+	<form name="form1" action="javascript:formresponse();">
+
+		<div data-role="fieldcontain">
+			<label for="textarea">意見回饋</label>
+			<br>
+			<textarea name="thought" id="thought" width ="200" height= "200"></textarea>
+		</div>
+		<input type="submit" value="送出" style="#B0E0E6">
+	</form>
+	</center>
+</body>
+</html>

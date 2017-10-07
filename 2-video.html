@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="utf-8">
+	    <title>教學影片</title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+		<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
+        <script>
+        function vidchange(i)
+        {
+			vids = ["280iK7z7kFE", "YKJX1xevmx0", "BNOAsnBgdhk", "eiosjHorxSc", "ZI3oaISxuUg", "hKgUS2BTIVE","ukH1PHCvhW8"];
+            str = '<iframe width="100%" height="315" src="//www.youtube.com/embed/' + vids[i] + '" frameborder="0" allowfullscreen></iframe>';
+            document.getElementById("start").innerHTML = str;
+        }
+		function infos()
+		{
+			for (i=0; i<vids.length; i++)
+			{
+				types = ["有氧運動", "有氧運動", "伸展運動", "肌肉鍛鍊", "肌肉鍛鍊", "競技型運動","競技型運動"];
+				exercises = ["跑步","游泳","伸展","腹肌","啞鈴","棒球","籃球"];
+				str = '<li><a onclick="vidchange(' + i + ')"><h3>' + types[i] + '</h3><p>' + exercises[i] + '</p></a></li>';
+				document.write(str);
+			}
+		}
+        </script>
+    </head>
+<body>
+    <div data-role="page" id="x">
+	    <div data-role="header">
+			<h1>運動教學影片</h1>
+			<a href="home.html" rel="external">回首頁</a>
+			</div>
+	    <div data-role="content">
+            <div id="start"><script>javascript:vidchange(0);</script></div>
+		    <ul data-role="listview" data-inset="true"><script>javascript:infos();</script></ul>
+		</div>
+	</div>
+</body>
+</html>

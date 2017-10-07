@@ -1,0 +1,38 @@
+<!DOCTYPE html> 
+<html> 
+	<head> 
+	<meta charset="utf-8">
+		<title>好站連結</title> 
+		<meta name="viewport" content="width=device-width, initial-scale=1"> 
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+		<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
+        <script type="text/javascript" language="javascript"></script>
+            <script>
+            weblinks = ["http://www.nhi.gov.tw", "http://www.sa.gov.tw/", "http://espn.go.com/", "http://mlb.mlb.com/home", "http://www.nba.com/"];
+            imageicon =["center.png" , "teach_sport.gif" , "ESPN.png" , "MLB.png" , "NBA.png"]
+			linksname = ["中華民國衛生署網站", "中華民國體育署網站", "ESPN體育媒體公司網站", "MLB美國職棒大聯盟網站", "NBA美國職籃網站"];
+				function f()
+				{
+					for (var i=0; i<5; i++)
+					{
+					total = '<a href="' + weblinks[i] + '" rel="external"><img src="pic/' +imageicon[i] + '" width="200px"  /><br>' + linksname[i] + '</a><br><br><br>';
+					document.write(total);
+					}
+				}
+		</script>
+	</head> 
+<body> 
+	<div data-role="page">
+	<center>
+			<div data-role="header">
+				<h1>好站連結</h1>
+				<a href="home.html" rel="external">回首頁</a>
+			</div>
+			<div data-role="content">	
+				<script>f();</script>	
+			</div>
+			</center>
+		</div>
+</body>
+</html>
